@@ -49,14 +49,16 @@ func run() {
 	frameCounter := int64(0)
 	frameTime := 1.0 / frameCap
 	unprocessedTime := 0.0
-	startTime := time.Now()
+	lastTime := time.Now()
 
 	for isRunning {
 		shouldRender := false
-		passedTime := time.Since(startTime)
+		passedTime := time.Since(lastTime).Nanoseconds()
+		startTime := time.Now()
+		lastTime = startTime
 
-		unprocessedTime += float64(passedTime.Nanoseconds() / time.Second.Nanoseconds())
-		frameCounter += passedTime.Nanoseconds()
+		unprocessedTime += float64(passedTime) / float64(time.Second.Nanoseconds())
+		frameCounter += passedTime
 
 		for unprocessedTime > frameTime {
 			shouldRender = true
@@ -96,7 +98,7 @@ func draw() {
 	gl.UseProgram(program)
 
 	gl.BindVertexArray(VaoBuffer)
-	gl.DrawArrays(gl.TRIANGLES, 0, 3)
+	gl.DrawArrays(gl.TRIANGLES, 0, 6)
 
 	glfw.PollEvents()
 	window.SwapBuffers()
