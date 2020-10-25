@@ -21,6 +21,7 @@ var (
 	program uint32
 	VaoBuffer uint32
 	isRunning = false
+	delta float64
 )
 
 func Init() {
@@ -69,7 +70,10 @@ func run() {
 			if window.ShouldClose() {
 				Stop()
 			}
+
+			delta = frameTime
 			//TODO Update Game
+			update()
 
 			if frameCounter >= time.Second.Nanoseconds() {
 				fmt.Println(frames, "FPS")
@@ -87,10 +91,6 @@ func run() {
 	cleanUp()
 }
 
-func render() {
-	draw()
-}
-
 func cleanUp() {
 	glfw.Terminate()
 }
@@ -102,6 +102,6 @@ func draw() {
 	gl.BindVertexArray(VaoBuffer)
 	gl.DrawArrays(gl.TRIANGLES, 0, 6)
 
-	glfw.PollEvents()
 	window.SwapBuffers()
+	glfw.PollEvents()
 }
