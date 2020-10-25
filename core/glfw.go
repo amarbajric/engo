@@ -17,6 +17,11 @@ func InitGlfw() *glfw.Window {
 	if err != nil {
 		panic(err)
 	}
+
+	window.SetKeyCallback(GetKey)
+	window.SetMouseButtonCallback(GetMouseButton)
+	window.SetCursorPosCallback(GetMousePosition)
+
 	// bind window to current thread
 	window.MakeContextCurrent()
 
