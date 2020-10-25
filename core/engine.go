@@ -26,6 +26,8 @@ var (
 func Init() {
 	window = InitGlfw()
 	program = InitOpenGL()
+	// Disable V-Sync (i.e. 60FPS cap)
+	glfw.SwapInterval(0)
 }
 
 func Start() {
@@ -53,12 +55,12 @@ func run() {
 
 	for isRunning {
 		shouldRender := false
-		passedTime := time.Since(lastTime).Nanoseconds()
+		passedTime := time.Since(lastTime)
 		startTime := time.Now()
 		lastTime = startTime
 
-		unprocessedTime += float64(passedTime) / float64(time.Second.Nanoseconds())
-		frameCounter += passedTime
+		unprocessedTime += float64(passedTime.Nanoseconds()) / float64(time.Second.Nanoseconds())
+		frameCounter += passedTime.Nanoseconds()
 
 		for unprocessedTime > frameTime {
 			shouldRender = true
