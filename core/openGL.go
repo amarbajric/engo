@@ -25,6 +25,7 @@ func InitOpenGL() uint32 {
 
 	prog := gl.CreateProgram()
 
+	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.ClearColor(0.0, 0.0, 0.0, 0.0)
 	gl.FrontFace(gl.CW)
 	gl.CullFace(gl.BACK)
