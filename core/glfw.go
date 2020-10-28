@@ -25,6 +25,9 @@ func InitGlfw() *glfw.Window {
 	// bind window to current thread
 	window.MakeContextCurrent()
 
+	// Disable V-Sync (i.e. 60FPS cap)
+	glfw.SwapInterval(0)
+
 	return window
 }
 

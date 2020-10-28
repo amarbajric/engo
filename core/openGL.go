@@ -24,6 +24,17 @@ func InitOpenGL() uint32 {
 	}
 
 	prog := gl.CreateProgram()
+
+	gl.ClearColor(0.0, 0.0, 0.0, 0.0)
+	gl.FrontFace(gl.CW)
+	gl.CullFace(gl.BACK)
+	gl.Enable(gl.CULL_FACE)
+	gl.Enable(gl.DEPTH_TEST)
+
+	//TODO: Depth clamp
+
+	gl.Enable(gl.FRAMEBUFFER_SRGB)
+
 	gl.AttachShader(prog, vertexShader)
 	gl.AttachShader(prog, fragmentShader)
 	gl.LinkProgram(prog)

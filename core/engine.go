@@ -27,8 +27,6 @@ var (
 func Init() {
 	window = InitGlfw()
 	program = InitOpenGL()
-	// Disable V-Sync (i.e. 60FPS cap)
-	glfw.SwapInterval(0)
 }
 
 func Start() {
