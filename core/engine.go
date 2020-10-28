@@ -19,7 +19,6 @@ const (
 var (
 	window *glfw.Window
 	program uint32
-	VaoBuffer uint32
 	isRunning = false
 	delta float64
 )
@@ -45,6 +44,8 @@ func Stop() {
 
 func run() {
 	isRunning = true
+
+	start()
 
 	frames := 0
 	frameCounter := int64(0)
@@ -96,10 +97,6 @@ func cleanUp() {
 func draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.UseProgram(program)
-
-	gl.BindVertexArray(VaoBuffer)
-	gl.DrawArrays(gl.TRIANGLES, 0, 6)
-
 	window.SwapBuffers()
 	glfw.PollEvents()
 }
