@@ -66,7 +66,6 @@ func run() {
 			}
 
 			delta = frameTime
-			//TODO Update Game
 			update()
 
 			if frameCounter >= time.Second.Nanoseconds() {

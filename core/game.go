@@ -1,5 +1,7 @@
 package core
 
+import "math"
+
 var (
 	data = []Vertex{
 		{Vector3f{
@@ -20,6 +22,7 @@ var (
 	}
 	mesh = Mesh{}
 	shader = Shader{}
+	tmp = 0.0
 )
 
 func start() {
@@ -28,9 +31,13 @@ func start() {
 	shader.AddFragmentShader(loadShader("fragmentShader.glsl"))
 	shader.CompileShader()
 	mesh.AddVertices(data)
+
+	shader.addUniform("uniformFloat")
 }
 
 func update() {
+	tmp += delta
+	shader.setUniform1f("uniformFloat", float32(math.Abs(math.Sin(tmp))))
 }
 
 func render() {

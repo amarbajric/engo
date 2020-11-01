@@ -7,19 +7,19 @@ import (
 	"strings"
 )
 
-
 type Shader struct {
-	program uint32
+	program  uint32
+	uniforms map[string]int32
 }
 
 type Status struct {
-	statusCode int32
+	statusCode   int32
 	errorMessage error
 }
 
 func (s *Shader) Init() {
 	s.program = gl.CreateProgram()
-
+	s.uniforms = make(map[string]int32)
 	if s.program == 0 {
 		log.Fatal("Shader creation failed: Could not find valid memory location in init phase")
 	}
@@ -72,12 +72,38 @@ func (s *Shader) addProgram(programSource string, shaderType uint32) {
 	gl.AttachShader(s.program, shader)
 }
 
+func (s *Shader) addUniform(uniform string) {
+	uniformLocation := gl.GetUniformLocation(s.program, gl.Str(uniform+"\x00"))
+
+	if uniformLocation == 0xFFFFFFF {
+		log.Fatalf("could not find uniform '%s'", uniform)
+	}
+	s.uniforms[uniform] = uniformLocation
+}
+
+func (s *Shader) setUniform1i(uniformName string, value int32) {
+	gl.Uniform1i(s.uniforms[uniformName], value)
+}
+
+func (s *Shader) setUniform1f(uniformName string, value float32) {
+	gl.Uniform1f(s.uniforms[uniformName], value)
+}
+
+func (s *Shader) setUniform3f(uniformName string, value Vector3f) {
+	gl.Uniform3f(s.uniforms[uniformName], float32(value.X), float32(value.Y), float32(value.Z))
+}
+
+func (s *Shader) setUniform4m(uniformName string, value Matrix4f) {
+	projection := float32(value.M[0][0])
+	gl.UniformMatrix4fv(s.uniforms[uniformName], 1, false, &projection)
+}
+
 func getShaderStatus(shader uint32, statusCheckType *uint32, status *Status) {
 	gl.GetShaderiv(shader, *statusCheckType, &status.statusCode)
 	if status.statusCode == gl.FALSE {
 		var logLength int32
 		gl.GetShaderiv(shader, gl.INFO_LOG_LENGTH, &logLength)
-		logMessage := strings.Repeat("\x00", int(logLength) + 1)
+		logMessage := strings.Repeat("\x00", int(logLength)+1)
 		gl.GetShaderInfoLog(shader, logLength, nil, gl.Str(logMessage))
 
 		status.errorMessage = fmt.Errorf("shader status error: %v", logMessage)
@@ -89,7 +115,7 @@ func getProgramStatus(program uint32, statusCheckType *uint32, status *Status) {
 	if status.statusCode == gl.FALSE {
 		var logLength int32
 		gl.GetProgramiv(program, gl.INFO_LOG_LENGTH, &logLength)
-		logMessage := strings.Repeat("\x00", int(logLength) + 1)
+		logMessage := strings.Repeat("\x00", int(logLength)+1)
 		gl.GetProgramInfoLog(program, logLength, nil, gl.Str(logMessage))
 
 		status.errorMessage = fmt.Errorf("program status error: %v", logMessage)
@@ -97,7 +123,7 @@ func getProgramStatus(program uint32, statusCheckType *uint32, status *Status) {
 }
 
 func getStatus(ptr uint32, statusCheckType uint32) (int32, error) {
-	status := Status {
+	status := Status{
 		statusCode:   -1,
 		errorMessage: nil,
 	}
