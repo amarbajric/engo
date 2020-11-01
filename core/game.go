@@ -22,6 +22,11 @@ var (
 	}
 	mesh = Mesh{}
 	shader = Shader{}
+	transform = Transform{translation: Vector3f{
+		X: 0,
+		Y: 0,
+		Z: 0,
+	}}
 	tmp = 0.0
 )
 
@@ -32,15 +37,16 @@ func start() {
 	shader.CompileShader()
 	mesh.AddVertices(data)
 
-	shader.addUniform("uniformFloat")
+	shader.addUniform("transform")
 }
 
 func update() {
 	tmp += delta
-	shader.setUniform1f("uniformFloat", float32(math.Abs(math.Sin(tmp))))
+	transform.setTranslation1f(math.Sin(tmp), 0, 0)
 }
 
 func render() {
 	shader.Bind()
+	shader.setUniform4m("transform", transform.getTransformation())
 	mesh.Draw()
 }

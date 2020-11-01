@@ -94,8 +94,7 @@ func (s *Shader) setUniform3f(uniformName string, value Vector3f) {
 }
 
 func (s *Shader) setUniform4m(uniformName string, value Matrix4f) {
-	projection := float32(value.M[0][0])
-	gl.UniformMatrix4fv(s.uniforms[uniformName], 1, false, &projection)
+	gl.UniformMatrix4fv(s.uniforms[uniformName], 1, true, &value.flatten()[0])
 }
 
 func getShaderStatus(shader uint32, statusCheckType *uint32, status *Status) {
