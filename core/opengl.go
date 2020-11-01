@@ -6,24 +6,12 @@ import (
 )
 
 // initializes OpenGL and returns an initialized program
-func InitOpenGL() uint32 {
+func InitOpenGL() {
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Println("OpenGL version", version)
-
-	vertexShader, err := CompileShader(VertexShaderSource, gl.VERTEX_SHADER)
-	if err != nil {
-		panic(err)
-	}
-
-	fragmentShader, err := CompileShader(FragmentShaderSource, gl.FRAGMENT_SHADER)
-	if err != nil {
-		panic(err)
-	}
-
-	prog := gl.CreateProgram()
 
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.ClearColor(0.0, 0.0, 0.0, 0.0)
@@ -35,9 +23,4 @@ func InitOpenGL() uint32 {
 	//TODO: Depth clamp
 
 	gl.Enable(gl.FRAMEBUFFER_SRGB)
-
-	gl.AttachShader(prog, vertexShader)
-	gl.AttachShader(prog, fragmentShader)
-	gl.LinkProgram(prog)
-	return prog
 }
