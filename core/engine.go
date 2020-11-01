@@ -2,11 +2,8 @@ package core
 
 import (
 	"fmt"
-	"time"
-
-	// Use 4.1 as macOS has deprecated OpenGL since 10.15 and only supports up to v4.1
-	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"time"
 )
 
 const (
@@ -18,20 +15,20 @@ const (
 
 var (
 	window *glfw.Window
-	program uint32
 	isRunning = false
 	delta float64
 )
 
 func Init() {
 	window = InitGlfw()
-	program = InitOpenGL()
+	InitOpenGL()
 }
 
 func Start() {
 	if isRunning {
 		return
 	}
+	start()
 	run()
 }
 
@@ -44,8 +41,6 @@ func Stop() {
 
 func run() {
 	isRunning = true
-
-	start()
 
 	frames := 0
 	frameCounter := int64(0)
@@ -92,11 +87,4 @@ func run() {
 
 func cleanUp() {
 	glfw.Terminate()
-}
-
-func draw() {
-	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-	gl.UseProgram(program)
-	window.SwapBuffers()
-	glfw.PollEvents()
 }
