@@ -7,11 +7,11 @@ import (
 	"os"
 )
 
-const ShaderResources = "./res/shaders/"
+const SHADER_RESOURCES = "./res/shaders/"
 
 func loadShader(fileName string) string {
 	shaderProgram := fmt.Sprint()
-	shaderFile, err := os.Open(ShaderResources + fileName)
+	shaderFile, err := os.Open(SHADER_RESOURCES + fileName)
 	if err != nil {
 		log.Fatal(fmt.Sprintf("Error while %s shader '%s': ", "loading", fileName), err)
 	}

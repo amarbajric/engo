@@ -12,7 +12,7 @@ type Mesh struct {
 }
 
 func (m *Mesh) AddVertices(vertices []Vertex) {
-	m.size = int32(len(vertices) * VertexSize)
+	m.size = int32(len(vertices) * VERTEX_SIZE)
 	gl.GenBuffers(1, &m.vbo)
 	gl.BindBuffer(gl.ARRAY_BUFFER, m.vbo)
 	gl.BufferData(gl.ARRAY_BUFFER, 4 * int(m.size), gl.Ptr(createVertexSlice(vertices)), gl.STATIC_DRAW)
