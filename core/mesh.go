@@ -18,10 +18,10 @@ func (m *Mesh) AddVertices(vertices []Vertex) {
 	gl.BufferData(gl.ARRAY_BUFFER, 4 * int(m.size), gl.Ptr(createVertexSlice(vertices)), gl.STATIC_DRAW)
 }
 
-func createVertexSlice(vertices []Vertex) []float64 {
-	vertexSlice := make([]float64, 0)
+func createVertexSlice(vertices []Vertex) []float32 {
+	vertexSlice := make([]float32, 0)
 	for _, vertex := range vertices {
-		vertexSlice = append(vertexSlice, vertex.Pos.X, vertex.Pos.Y, vertex.Pos.Z)
+		vertexSlice = append(vertexSlice, float32(vertex.Pos.X), float32(vertex.Pos.Y), float32(vertex.Pos.Z))
 	}
 	fmt.Println(vertexSlice)
 	return vertexSlice
