@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 )
@@ -18,15 +17,6 @@ func (m *Mesh) AddVertices(vertices []Vertex) {
 	gl.BufferData(gl.ARRAY_BUFFER, 4 * int(m.size), gl.Ptr(createVertexSlice(vertices)), gl.STATIC_DRAW)
 }
 
-func createVertexSlice(vertices []Vertex) []float32 {
-	vertexSlice := make([]float32, 0)
-	for _, vertex := range vertices {
-		vertexSlice = append(vertexSlice, float32(vertex.Pos.X), float32(vertex.Pos.Y), float32(vertex.Pos.Z))
-	}
-	fmt.Println(vertexSlice)
-	return vertexSlice
-}
-
 func (m *Mesh) Draw() {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -39,4 +29,12 @@ func (m *Mesh) Draw() {
 
 	window.SwapBuffers()
 	glfw.PollEvents()
+}
+
+func createVertexSlice(vertices []Vertex) []float32 {
+	vertexSlice := make([]float32, 0)
+	for _, vertex := range vertices {
+		vertexSlice = append(vertexSlice, float32(vertex.Pos.X), float32(vertex.Pos.Y), float32(vertex.Pos.Z))
+	}
+	return vertexSlice
 }

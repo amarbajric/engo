@@ -1,7 +1,7 @@
 #version 410
 in vec3 vp;
-out vec4 color;
+out vec4 colour;
 void main() {
-    color = vec4(clamp(vp, 0.0, 1.0), 1.0);
+    colour = vec4(clamp(vp, 0.0, 1.0), 1.0);
     gl_Position = vec4(vp, 1.0);
 }
