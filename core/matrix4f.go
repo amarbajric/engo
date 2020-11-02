@@ -1,5 +1,7 @@
 package core
 
+import "math"
+
 type Matrix4f struct {
 	M [4][4]float64
 }
@@ -34,6 +36,37 @@ func (m *Matrix4f) InitTranslation(x float64, y float64, z float64) {
 			}
 		}
 	}
+}
+
+func (m *Matrix4f) InitRotation(x float64, y float64, z float64) {
+	identityMatrix := Matrix4f{M: [4][4]float64{}}
+	identityMatrix.InitIdentity()
+
+	rotX := identityMatrix
+	rotY := identityMatrix
+	rotZ := identityMatrix
+
+	_x := x * (math.Pi/180)
+	_y := y * (math.Pi/180)
+	_z := z * (math.Pi/180)
+
+	rotZ.M[0][0] = math.Cos(_z)
+	rotZ.M[0][1] = -math.Sin(_z)
+	rotZ.M[1][0] = math.Sin(_z)
+	rotZ.M[1][1] = math.Cos(_z)
+
+	rotX.M[1][1] = math.Cos(_x)
+	rotX.M[1][2] = -math.Sin(_x)
+	rotX.M[2][1] = math.Sin(_x)
+	rotX.M[2][2] = math.Cos(_x)
+
+	rotY.M[0][0] = math.Cos(_y)
+	rotY.M[0][2] = -math.Sin(_y)
+	rotY.M[2][0] = math.Sin(_y)
+	rotY.M[2][2] = math.Cos(_y)
+
+	mulYX := rotY.Mul(&rotX)
+	m.M = rotZ.Mul(&mulYX).M
 }
 
 func (m *Matrix4f) Mul(r *Matrix4f) Matrix4f {
