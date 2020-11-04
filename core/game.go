@@ -3,7 +3,7 @@ package core
 import "math"
 
 var (
-	data = []Vertex{
+	vertices = []Vertex{
 		{Vector3f{
 			X: -1,
 			Y: -1,
@@ -19,7 +19,13 @@ var (
 			Y: -1,
 			Z: 0,
 		}},
+		{Vector3f{
+			X: 0,
+			Y: -1,
+			Z: 1,
+		}},
 	}
+	indices = []uint32{0,1,3,3,1,2,2,1,0,0,2,3}
 	mesh = Mesh{}
 	shader = Shader{}
 	transform = Transform{translation: Vector3f{
@@ -30,6 +36,10 @@ var (
 		X: 0,
 		Y: 0,
 		Z: 0,
+	}, scale: Vector3f{
+		X: 1,
+		Y: 1,
+		Z: 1,
 	}}
 	tmp = 0.0
 )
@@ -39,7 +49,7 @@ func start() {
 	shader.AddVertexShader(loadShader("vertexShader.glsl"))
 	shader.AddFragmentShader(loadShader("fragmentShader.glsl"))
 	shader.CompileShader()
-	mesh.AddVertices(data)
+	mesh.AddVertices(vertices, indices)
 
 	shader.addUniform("transform")
 }
@@ -47,10 +57,10 @@ func start() {
 func update() {
 	tmp += delta
 
-	sinTmp := math.Sin(tmp)
-	transform.setTranslation1f(math.Sin(tmp), 0, 0)
-	transform.setRotation1f(0, 0, math.Sin(tmp) * 180)
-	transform.setScale1f(sinTmp, sinTmp, sinTmp)
+	//sinTmp := math.Sin(tmp)
+	//transform.setTranslation1f(math.Sin(tmp), 0, 0)
+	transform.setRotation1f(0, math.Sin(tmp) * 361, 0)
+	//transform.setScale1f(sinTmp, sinTmp, sinTmp)
 }
 
 func render() {
