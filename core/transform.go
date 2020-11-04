@@ -3,6 +3,7 @@ package core
 type Transform struct {
 	translation Vector3f
 	rotation    Vector3f
+	scale       Vector3f
 }
 
 func (t *Transform) setTranslation1f(x float64, y float64, z float64) {
@@ -25,10 +26,24 @@ func (t *Transform) setRotation3f(vector Vector3f) {
 	t.rotation = vector
 }
 
+func (t *Transform) setScale1f(x float64, y float64, z float64) {
+	t.scale.X = x
+	t.scale.Y = y
+	t.scale.Z = z
+}
+
+func (t *Transform) setScale3f(vector Vector3f) {
+	t.scale = vector
+}
+
 func (t *Transform) getTransformation() Matrix4f {
-	translationMatrix := Matrix4f{M: [4][4]float64{}}
-	rotationMatrix := Matrix4f{M: [4][4]float64{}}
+	translationMatrix := Matrix4f{[4][4]float64{}}
+	rotationMatrix := Matrix4f{[4][4]float64{}}
+	scaleMatrix := Matrix4f{[4][4]float64{}}
 	translationMatrix.InitTranslation(t.translation.X, t.translation.Y, t.translation.Z)
 	rotationMatrix.InitRotation(t.rotation.X, t.rotation.Y, t.rotation.Z)
-	return translationMatrix.Mul(&rotationMatrix)
+	scaleMatrix.InitScale(t.scale.X, t.scale.Y, t.scale.Z)
+
+	scaledRotationMatrix := rotationMatrix.Mul(&scaleMatrix)
+	return translationMatrix.Mul(&scaledRotationMatrix)
 }

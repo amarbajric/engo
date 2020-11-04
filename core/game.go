@@ -46,8 +46,11 @@ func start() {
 
 func update() {
 	tmp += delta
+
+	sinTmp := math.Sin(tmp)
 	transform.setTranslation1f(math.Sin(tmp), 0, 0)
 	transform.setRotation1f(0, 0, math.Sin(tmp) * 180)
+	transform.setScale1f(sinTmp, sinTmp, sinTmp)
 }
 
 func render() {
