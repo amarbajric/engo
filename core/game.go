@@ -42,6 +42,7 @@ var (
 		Z: 1,
 	}}
 	tmp = 0.0
+	diamondMesh Mesh
 )
 
 func start() {
@@ -49,22 +50,25 @@ func start() {
 	shader.AddVertexShader(loadShader("vertexShader.glsl"))
 	shader.AddFragmentShader(loadShader("fragmentShader.glsl"))
 	shader.CompileShader()
-	mesh.AddVertices(vertices, indices)
+	//mesh.AddVertices(vertices, indices)
 
 	shader.addUniform("transform")
+
+	diamondMesh = loadMesh("res/models/pyramid.obj")
 }
 
 func update() {
 	tmp += delta
 
-	//sinTmp := math.Sin(tmp)
-	//transform.setTranslation1f(math.Sin(tmp), 0, 0)
-	transform.setRotation1f(0, math.Sin(tmp) * 361, 0)
-	//transform.setScale1f(sinTmp, sinTmp, sinTmp)
+	sinTmp := math.Sin(tmp)
+	transform.setTranslation1f(math.Sin(tmp), 0, 0)
+	transform.setRotation1f(0, math.Sin(tmp) * 180, 0)
+	transform.setScale1f(sinTmp, sinTmp, sinTmp)
 }
 
 func render() {
 	shader.Bind()
 	shader.setUniform4m("transform", transform.getTransformation())
-	mesh.Draw()
+	//mesh.Draw()
+	diamondMesh.Draw()
 }
