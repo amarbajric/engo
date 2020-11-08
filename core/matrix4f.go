@@ -89,6 +89,36 @@ func (m *Matrix4f) InitRotation(x float64, y float64, z float64) {
 	m.M = rotZ.Mul(&mulYX).M
 }
 
+func (m *Matrix4f) InitProjection(fov float64, width float64, height float64, zNear float64, zFar float64) {
+	aspectRatio := width/height
+	tanHalfFOV := math.Tan((fov/2) * (math.Pi/180))
+	zRange := zNear - zFar
+
+	for i := 0; i <= 3; i++ {
+		for j := 0; j <= 3; j++ {
+			if i == j {
+				if i == 0 {
+					m.M[i][j] = 1 / (tanHalfFOV * aspectRatio)
+				} else if i == 1 {
+					m.M[i][j] = 1 / (tanHalfFOV)
+				} else if i == 2 {
+					m.M[i][j] = (-zNear - zFar)/zRange
+				} else if i == 3 {
+					m.M[i][j] = 0
+				}
+			} else {
+				if i == 3 && j == 2 {
+					m.M[i][j] = 1
+				} else if i == 2 && j == 3 {
+					m.M[i][j] = (2 * zFar * zNear) / zRange
+				} else {
+					m.M[i][j] = 0
+				}
+			}
+		}
+	}
+}
+
 func (m *Matrix4f) Mul(r *Matrix4f) Matrix4f {
 	matrixRes := Matrix4f{}
 

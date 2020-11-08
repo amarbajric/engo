@@ -51,6 +51,7 @@ func start() {
 	shader.AddFragmentShader(loadShader("fragmentShader.glsl"))
 	shader.CompileShader()
 	//mesh.AddVertices(vertices, indices)
+	transform.setProjection(70, width, height ,.1, 1000)
 
 	shader.addUniform("transform")
 
@@ -60,15 +61,15 @@ func start() {
 func update() {
 	tmp += delta
 
-	sinTmp := math.Sin(tmp)
-	transform.setTranslation1f(math.Sin(tmp), 0, 0)
+	//sinTmp := math.Sin(tmp)
+	transform.setTranslation1f(math.Sin(tmp), 0, 3)
 	transform.setRotation1f(0, math.Sin(tmp) * 180, 0)
-	transform.setScale1f(sinTmp, sinTmp, sinTmp)
+	//transform.setScale1f(sinTmp, sinTmp, sinTmp)
 }
 
 func render() {
 	shader.Bind()
-	shader.setUniform4m("transform", transform.getTransformation())
+	shader.setUniform4m("transform", transform.getProjectedTransformation())
 	//mesh.Draw()
 	diamondMesh.Draw()
 }
