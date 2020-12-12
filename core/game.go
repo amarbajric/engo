@@ -52,6 +52,8 @@ func start() {
 	shader.CompileShader()
 	//mesh.AddVertices(vertices, indices)
 	transform.setProjection(70, width, height ,.1, 1000)
+	transform.camera = Camera{}
+	transform.camera.InitCamera()
 
 	shader.addUniform("transform")
 
@@ -64,6 +66,7 @@ func update() {
 	//sinTmp := math.Sin(tmp)
 	transform.setTranslation1f(math.Sin(tmp), 0, 3)
 	transform.setRotation1f(0, math.Sin(tmp) * 180, 0)
+
 	//transform.setScale1f(sinTmp, sinTmp, sinTmp)
 }
 

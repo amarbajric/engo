@@ -42,7 +42,30 @@ func (v *Vector3f) Normalize() {
 	v.Z /= length
 }
 
-func (v *Vector3f) Rotate(angle float64) {}
+func (v *Vector3f) Rotate(angle float64, axis Vector3f) {
+	sinHalfAngle := math.Sin((angle / 2) * (math.Pi/180))
+	cosHalfAngle := math.Cos((angle / 2) * (math.Pi/180))
+
+	rX := axis.X * sinHalfAngle
+	rY := axis.Y * sinHalfAngle
+	rZ := axis.Y * sinHalfAngle
+	rW := cosHalfAngle
+
+	rotation := Quaternion{
+		X: rX,
+		Y: rY,
+		Z: rZ,
+		W: rW,
+	}
+	conjugate := rotation.Conjugate()
+
+	w := rotation.MulV(*v)
+	w2 := w.Mul(conjugate)
+
+	v.X = w2.X
+	v.Y = w2.Y
+	v.Z = w2.Z
+}
 
 func (v *Vector3f) AddV(r Vector3f) Vector3f {
 	return Vector3f{

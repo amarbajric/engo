@@ -9,6 +9,7 @@ type Transform struct {
 	width       float32
 	height      float32
 	fov         float32
+	camera      Camera
 }
 
 func (t *Transform) setTranslation1f(x float64, y float64, z float64) {
@@ -65,6 +66,12 @@ func (t *Transform) getProjectedTransformation() Matrix4f {
 	transformationMatrix := t.getTransformation()
 	projectionMatrix := Matrix4f{M: [4][4]float64{}}
 	projectionMatrix.InitProjection(float64(t.fov), float64(t.width), float64(t.height), float64(t.zNear), float64(t.zFar))
+	cameraRotation := Matrix4f{M: [4][4]float64{}}
+	cameraRotation.InitCamera(t.camera.forward, t.camera.up)
+	cameraTranslation := Matrix4f{M: [4][4]float64{}}
+	cameraTranslation.InitTranslation(-t.camera.pos.X, -t.camera.pos.Y, -t.camera.pos.Z)
 
-	return projectionMatrix.Mul(&transformationMatrix)
+	camTranslationTransformation := cameraTranslation.Mul(&transformationMatrix)
+	camRotation := cameraRotation.Mul(&camTranslationTransformation)
+	return projectionMatrix.Mul(&camRotation)
 }

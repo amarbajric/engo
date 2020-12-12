@@ -1,6 +1,8 @@
 package core
 
-import "math"
+import (
+	"math"
+)
 
 type Matrix4f struct {
 	M [4][4]float64
@@ -114,6 +116,55 @@ func (m *Matrix4f) InitProjection(fov float64, width float64, height float64, zN
 				} else {
 					m.M[i][j] = 0
 				}
+			}
+		}
+	}
+}
+
+func (m *Matrix4f) InitCamera(forward Vector3f, up Vector3f) {
+	f := forward
+	f.Normalize()
+	r := up
+	r.Normalize()
+	r = r.Cross(&f)
+	u := f.Cross(&r)
+
+	for i := 0; i <= 3; i++ {
+		for j := 0; j <= 3; j++ {
+			if i == 0 {
+				if j == 0 {
+					m.M[i][j] = r.X
+				} else if j == 1 {
+					m.M[i][j] = r.Y
+				} else if j == 2 {
+					m.M[i][j] = r.Z
+				} else {
+					m.M[i][j] = 0
+				}
+			} else if i == 1 {
+				if j == 0 {
+					m.M[i][j] = u.X
+				} else if j == 1 {
+					m.M[i][j] = u.Y
+				} else if j == 2 {
+					m.M[i][j] = u.Z
+				} else {
+					m.M[i][j] = 0
+				}
+			} else if i == 2 {
+				if j == 0 {
+					m.M[i][j] = f.X
+				} else if j == 1 {
+					m.M[i][j] = f.Y
+				} else if j == 2 {
+					m.M[i][j] = f.Z
+				} else {
+					m.M[i][j] = 0
+				}
+			} else if i == j {
+				m.M[i][j] = 1
+			} else {
+				m.M[i][j] = 0
 			}
 		}
 	}
